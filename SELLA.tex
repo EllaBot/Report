@@ -1,0 +1,44 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{algorithm2e}
+\newcommand{\argmin}{\operatornamewithlimits{argmin}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+\begin{document}
+
+\section{Algorithm}
+
+
+$
+\min_L \frac{1}{T} \sum^{T}_{t=1}\argmin_{s^{(t)}}\left[-J(\theta^{(t)} + \mu\norm{s^{(t)}}_1 \right] + \lambda\norm{L}_F^2
+$
+
+
+\begin{algorithm}
+
+ \SetKwData{T}{T}\SetKwData{t}{t}\SetKwData{A}{A}\SetKwData{b}{b}\SetKwData{L}{L}
+  \SetKwFunction{ExecuteSARSA}{executeSARSA}\SetKwFunction{IsNewTask}{isNewTask}\SetKwFunction{ReinitializeAllZeroColumns}{reinitializeAllZeroColumns}
+
+  \BlankLine
+  \T$\leftarrow$ $0$, \A$\leftarrow zeros_{k \times d, k \times d}$\;
+  \b$\leftarrow$ $zeros_{k \times d, 1}$, \L $\leftarrow zeros_{d \times k}$\;
+  \BlankLine
+  \While{$true$}{
+    \lIf{\IsNewTask{\t}}{
+        \T$\leftarrow$ \T $+\ 1$
+    }\Else{
+        \A$\leftarrow$ \A $-\ (S^{(t)}S^{(t)}^\top) \otimes D^{(t)}$\;
+        \b$\leftarrow$ \b $-\ vec(S^{(t)}^\top\otimes(a^{(t)}^\top D^{(t)})$
+    }
+    $(a^{(t)}, D^{(t)}) \leftarrow$\ExecuteSARSA{}\;
+    \L$\leftarrow$\ReinitializeAllZeroColumns{\L}\;
+    $s^{(t)}\leftarrow ******$\;
+    \A$\leftarrow$ \A $+\ (S^{(t)}S^{(t)}^\top) \otimes D^{(t)}$\;
+    \b$\leftarrow$ \b $+\ vec(S^{(t)}^{\top}\otimes(a^{(t)}^\top D^{(t)}))$\;
+    \L$\leftarrow mat((\frac{1}{T}A + \lambda I_{k \times d, k \times d})^{-1} \frac{1}{T}b)$\; 
+  }
+  \caption{SELLA}\label{algo_disjdecomp}
+\end{algorithm}\DecMargin{1em}
+
+ \end{document}
